@@ -84,7 +84,7 @@ def plot_with_one_axis(list_of_data:list, name_x="x", name_y="y", plot_title="",
     plt.show()
 
 
-def plot_with_one_axis_with_vertical_lines(list_of_data:list, name_x="x", name_y="y", plot_title="title", filename_to_save="nosvg", marker_size="5", font_size=16, offset_text_size=16, legend_local="best", legend_size=16, x_ticks_limit=5, vlines=None, y_lim = None): # [data_x, data_y, label, colorr, line_style, marker_type], [[x_val, color, linestyle], ...]
+def plot_with_one_axis_with_vertical_lines(list_of_data:list, name_x="x", name_y="y", plot_title="title", filename_to_save="nosvg", marker_size="5", font_size=16, offset_text_size=16, legend_local="best", legend_size=16, x_ticks_limit=5, vlines=None, y_lim = None, invert_xaxis = False): # [data_x, data_y, label, colorr, line_style, marker_type], [[x_val, color, linestyle], ...]
     """
     Plots multiple data series on a single axis.
 
@@ -97,7 +97,7 @@ def plot_with_one_axis_with_vertical_lines(list_of_data:list, name_x="x", name_y
         marker_size (int): Size of markers.
         font_size (int): Font size for axis labels and title.
         offset_text_size (int): Font size for scientific notation offset.
-        legend_local (str): Position of the legend.
+        legend_local (str): Position of the legend. "best", "upper right", "upper left", "lower left", "lower right", "right", "center left", "center right", "lower center", "upper center", "center"
         legend_size (int): Font size for the legend.
         x_ticks_limit (int): Number of ticks on x-axis.
         y_lim (list): example: y_lim = [0, 250]
@@ -135,15 +135,19 @@ def plot_with_one_axis_with_vertical_lines(list_of_data:list, name_x="x", name_y
     if y_lim:
         plt.ylim(*y_lim)
 
-    # Save and show the plot
-    if filename_to_save != "nosvg":
-        fnts = filename_to_save + ".pdf"
-        plt.savefig(fnts)
-
     # Plot vertical lines based on vlines parameter
     if vlines:
         for x_val, color, linestyle in vlines:
             plt.axvline(x=x_val, color=color, linestyle=linestyle)
+
+    # Invert x-axis if needed
+    if invert_xaxis:
+        plt.gca().invert_xaxis()
+
+    # Save and show the plot
+    if filename_to_save != "nosvg":
+        fnts = filename_to_save + ".pdf"
+        plt.savefig(fnts)
 
     plt.show()
 
@@ -195,7 +199,7 @@ def plot_with_one_axis_with_points(list_of_data:list, list_of_points:list, name_
 
     plt.show()
 
-def plot_with_two_axes_with_N_curves_with_VERTICAL_lines(data_y_one:list, data_y_two:list, name_x="name_x", name_y1="name_y1", name_y2="name_y2", col_ax1 = "red", col_ax2= "blue", plot_title="title", filename_to_save="nopdf", marker_size="5", font_size=18, legend_size=18, legend_local="best", vlines=None, x_ticks=True):
+def plot_with_two_axes_with_N_curves_with_VERTICAL_lines(data_y_one:list, data_y_two:list, name_x="name_x", name_y1="name_y1", name_y2="name_y2", col_ax1 = "red", col_ax2= "blue", plot_title="title", filename_to_save="nopdf", marker_size="5", font_size=18, legend_size=18, legend_local="best", vlines=None, x_ticks=True, invert_x = False):
 
     """
         0: "best"
@@ -249,6 +253,11 @@ def plot_with_two_axes_with_N_curves_with_VERTICAL_lines(data_y_one:list, data_y
         plot_2.append(ax2.plot(x, y, color=col, label=lab, marker=linsh, linestyle=lins, markersize = marker_size)) #, marker=lins, linestyle=linsh)2
             
     ax2.tick_params(axis='y', labelsize=font_size) 
+
+    if invert_x:
+        print(invert_x)
+        ax1.invert_xaxis()
+        ax2.invert_xaxis()
     
     fig.tight_layout()
 
@@ -270,6 +279,8 @@ def plot_with_two_axes_with_N_curves_with_VERTICAL_lines(data_y_one:list, data_y
         plt.savefig(fnts)
     
     plt.show()
+
+
 
 def one_axis__N_Y_with_error_bars__with_N_fits(list_of_data: list, list_of_fit: list, name_x="name_x", name_y="name_y", plot_title="title", filename_to_save="nopdf", marker_type="o", marker_size="5", capsize_errorbars=5, alpha_data=0.5, font_size=16, offset_text_size=16, legend_size=16, legend_local="best", x_ticks_limit=5): # [x,y,y_err,label,color,linestyle]                                               
     """

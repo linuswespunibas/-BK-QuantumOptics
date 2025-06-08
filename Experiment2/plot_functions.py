@@ -136,17 +136,19 @@ def plot_with_one_axis_with_vertical_lines(list_of_data:list, name_x="x", name_y
     if y_lim:
         plt.ylim(*y_lim)
 
-    # Save and show the plot
-    if filename_to_save != "nosvg":
-        fnts = filename_to_save + ".pdf"
-        plt.savefig(fnts)
-
     # Plot vertical lines based on vlines parameter
     if vlines:
         for x_val, color, linestyle in vlines:
             plt.axvline(x=x_val, color=color, linestyle=linestyle)
 
+
+    # Save and show the plot
+    if filename_to_save != "nosvg":
+        fnts = filename_to_save + ".pdf"
+        plt.savefig(fnts)
+
     plt.show()
+
 
 def plot_with_one_axis_with_points(list_of_data:list, list_of_points:list, name_x="x", name_y="y", plot_title="title", filename_to_save="nopdf", marker_type="o", marker_size="5"): # list_of_data: [[data_x, data_y, label, colorr, line_style]], list_of_points: [[x_val, y_val, labell, markerr, markersizee, colorr]]
     """
@@ -289,11 +291,13 @@ def one_axis__N_Y_with_error_bars__with_N_fits(list_of_data: list, list_of_fit: 
     
     plt.figure()
 
+
     # [x,y,y_err,label,color,linestyle]
     # Plot data with error bars
     for d in list_of_data:
         # print(d[0],d[1],d[2],d[3],d[4],d[5])
         plt.errorbar(d[0], d[1], yerr=d[2], fmt=marker_type, label=d[3], capsize=capsize_errorbars, color=d[4], linestyle=d[5], markersize=marker_size, alpha=alpha_data)
+
 
     # Plot fit lines
     for f in list_of_fit:
@@ -308,7 +312,11 @@ def one_axis__N_Y_with_error_bars__with_N_fits(list_of_data: list, list_of_fit: 
     
     # Set title and legend
     plt.title(plot_title, fontsize=font_size)
-    plt.legend(loc=legend_local, fontsize=legend_size)
+    # plt.legend(loc=legend_local, fontsize=legend_size)
+    # Force legend to use handles/labels in the correct order
+    handles, labels = plt.gca().get_legend_handles_labels()
+    plt.legend(handles[::-1], labels[::-1], loc=legend_local, fontsize=legend_size)
+
 
     # Set font size for axis ticks and rotate x-axis labels
     plt.xticks(fontsize=font_size)
